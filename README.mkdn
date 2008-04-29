@@ -1,0 +1,24 @@
+Statgrab
+========
+
+Building and installing
+-----------------------
+
+    ruby extconf.rb
+    make
+    su
+    make install
+
+Sample program
+--------------
+
+    require 'statgrab'
+    sg = Statgrab.new
+    puts "CPU Usage: %.1f%%" % sg.cpu_percents[:user]
+
+Licensing
+---------
+
+Licensed under the Academic Free License version 3.0
+
+Copyright (C) 2008 Dag Odenhall <dag.odenhall@gmail.com>
