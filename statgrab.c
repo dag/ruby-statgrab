@@ -8,11 +8,11 @@ VALUE cStatgrab;
 
 static VALUE statgrab_initialize(VALUE self, VALUE args) {
   if(sg_init())
-    rb_raise(rb_eRuntimeError, "sg_init failed");
+    rb_raise(rb_eRuntimeError, "sg_init() failed: %s", sg_str_error(sg_get_error()));
 
   if(rb_ary_shift(args) != Qfalse)
     if(sg_drop_privileges())
-      rb_raise(rb_eRuntimeError, "sg_drop_privileges failed");
+      rb_raise(rb_eRuntimeError, "sg_drop_privileges() failed: %s", sg_str_error(sg_get_error()));
 
   return self;
 }
