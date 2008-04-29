@@ -10,6 +10,13 @@ static VALUE statgrab_init(VALUE self) {
     return Qfalse;
 }
 
+static VALUE statgrab_drop_privileges(VALUE self) {
+  if(!sg_drop_privileges())
+    return Qtrue;
+  else
+    return Qfalse;
+}
+
 static VALUE statgrab_cpu_percents(VALUE self) {
   sg_cpu_percents *percents;
   VALUE info;
@@ -31,5 +38,6 @@ static VALUE statgrab_cpu_percents(VALUE self) {
 void Init_statgrab() {
   cStatgrab = rb_define_module("Statgrab");
   rb_define_module_function(cStatgrab, "init", statgrab_init, 0);
+  rb_define_module_function(cStatgrab, "drop_privileges", statgrab_drop_privileges, 0);
   rb_define_module_function(cStatgrab, "cpu_percents", statgrab_cpu_percents, 0);
 }
