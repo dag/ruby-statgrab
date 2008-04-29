@@ -30,7 +30,11 @@ static VALUE statgrab_cpu_percents(VALUE self) {
   rb_hash_aset(info, ID2SYM(rb_intern("iowait")), rb_float_new(percents->iowait));
   rb_hash_aset(info, ID2SYM(rb_intern("swap")), rb_float_new(percents->swap));
   rb_hash_aset(info, ID2SYM(rb_intern("nice")), rb_float_new(percents->nice));
-  rb_hash_aset(info, ID2SYM(rb_intern("time_taken")), rb_float_new(percents->time_taken));
+  rb_hash_aset(info, ID2SYM(rb_intern("time_taken")), INT2NUM(percents->time_taken));
+
+  VALUE time_now;
+  time_now = rb_funcall(rb_cTime, rb_intern("now"), 0);
+  rb_hash_aset(info, ID2SYM(rb_intern("last_call")), rb_funcall(time_now, rb_intern("-"), 1, INT2NUM(percents->time_taken)));
 
   return info;
 }
