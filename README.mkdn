@@ -4,10 +4,18 @@ Statgrab
 Building and installing
 -----------------------
 
+Follow these procedures to build and install manually:
+
     ruby extconf.rb
     make
     su
     make install
+
+Optionally, you may build a Rubygem:
+
+    gem build statgrab.gemspec
+    su
+    gem install statgrab-1.0.gem
 
 Sample program
 --------------
