@@ -1,8 +1,12 @@
-Statgrab
-========
+Statgrab for Ruby
+=================
+
+Ruby bindings to the libstatgrab portable system statistics library.
 
 Building and installing
 -----------------------
+
+First, make sure libstatgrab is installed on your system.
 
 Follow these procedures to build and install manually:
 
