@@ -17,6 +17,21 @@ Optionally, you may build a Rubygem:
     su
     gem install statgrab-1.0.gem
 
+API
+---
+
+Every method raises a `StatgrabError` on failure. The `new`
+method takes a `false` argument to skip privileges dropping.
+All instance methods return symbol hashes corresponding to
+their libstatgrab struct counterparts (sometimes with added
+Ruby goodies).
+
+Instance methods:
+
+- `cpu_stats`
+- `cpu_stats_diff`
+- `cpu_percents`
+
 Sample program
 --------------
 
