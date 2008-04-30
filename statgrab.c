@@ -47,7 +47,7 @@ VALUE eStatgrabUnsupportedError;
 VALUE eStatgrabXswVerMismatchError;
 
 static void statgrab_handle_error() {
-  int err_num;
+  sg_error err_num;
   err_num = sg_get_error();
 
   switch(err_num) {
