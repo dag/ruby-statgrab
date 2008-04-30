@@ -1,4 +1,6 @@
-Makefile
-mkmf.log
-*.o
-*.so
+*
+!LICENSE
+!README.mkdn
+!extconf.rb
+!statgrab.c
+!statgrab.gemspec
