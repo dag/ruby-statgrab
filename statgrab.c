@@ -5,15 +5,141 @@
 #include <statgrab.h>
 
 VALUE cStatgrab;
-VALUE eStatgrabError;
+VALUE eStatgrabException;
+VALUE eStatgrabAsprintfError;
+VALUE eStatgrabDevicesError;
+VALUE eStatgrabDevstatGetdevsError;
+VALUE eStatgrabDevstatSelectdevsError;
+VALUE eStatgrabDiskinfoError;
+VALUE eStatgrabEnoentError;
+VALUE eStatgrabGetifaddrsError;
+VALUE eStatgrabGetmntinfoError;
+VALUE eStatgrabGetpagesizeError;
+VALUE eStatgrabHostError;
+VALUE eStatgrabKstatDataLookupError;
+VALUE eStatgrabKstatLookupError;
+VALUE eStatgrabKstatOpenError;
+VALUE eStatgrabKstatReadError;
+VALUE eStatgrabKvmGetswapinfoError;
+VALUE eStatgrabKvmOpenfilesError;
+VALUE eStatgrabMallocError;
+VALUE eStatgrabMemstatusError;
+VALUE eStatgrabOpenError;
+VALUE eStatgrabOpendirError;
+VALUE eStatgrabParseError;
+VALUE eStatgrabPdhaddError;
+VALUE eStatgrabPdhcollectError;
+VALUE eStatgrabPdhopenError;
+VALUE eStatgrabPdhreadError;
+VALUE eStatgrabPermissionError;
+VALUE eStatgrabPstatError;
+VALUE eStatgrabSetegidError;
+VALUE eStatgrabSeteuidError;
+VALUE eStatgrabSetmntentError;
+VALUE eStatgrabSocketError;
+VALUE eStatgrabSwapctlError;
+VALUE eStatgrabSysconfError;
+VALUE eStatgrabSysctlError;
+VALUE eStatgrabSysctlbynameError;
+VALUE eStatgrabSysctlnametomibError;
+VALUE eStatgrabUnameError;
+VALUE eStatgrabUnsupportedError;
+VALUE eStatgrabXswVerMismatchError;
+
+static void statgrab_handle_error() {
+  int err_num;
+  err_num = sg_get_error();
+
+  switch(err_num) {
+    case SG_ERROR_NONE:
+      return;
+    case SG_ERROR_ASPRINTF:
+      rb_raise(eStatgrabAsprintfError, "%s", sg_str_error(err_num));
+    case SG_ERROR_DEVICES:
+      rb_raise(eStatgrabDevicesError, "%s", sg_str_error(err_num));
+    case SG_ERROR_DEVSTAT_GETDEVS:
+      rb_raise(eStatgrabDevstatGetdevsError, "%s", sg_str_error(err_num));
+    case SG_ERROR_DEVSTAT_SELECTDEVS:
+      rb_raise(eStatgrabDevstatSelectdevsError, "%s", sg_str_error(err_num));
+    case SG_ERROR_DISKINFO:
+      rb_raise(eStatgrabDiskinfoError, "%s", sg_str_error(err_num));
+    case SG_ERROR_ENOENT:
+      rb_raise(eStatgrabEnoentError, "%s", sg_str_error(err_num));
+    case SG_ERROR_GETIFADDRS:
+      rb_raise(eStatgrabGetifaddrsError, "%s", sg_str_error(err_num));
+    case SG_ERROR_GETMNTINFO:
+      rb_raise(eStatgrabGetmntinfoError, "%s", sg_str_error(err_num));
+    case SG_ERROR_GETPAGESIZE:
+      rb_raise(eStatgrabGetpagesizeError, "%s", sg_str_error(err_num));
+    case SG_ERROR_HOST:
+      rb_raise(eStatgrabHostError, "%s", sg_str_error(err_num));
+    case SG_ERROR_KSTAT_DATA_LOOKUP:
+      rb_raise(eStatgrabKstatDataLookupError, "%s", sg_str_error(err_num));
+    case SG_ERROR_KSTAT_LOOKUP:
+      rb_raise(eStatgrabKstatLookupError, "%s", sg_str_error(err_num));
+    case SG_ERROR_KSTAT_OPEN:
+      rb_raise(eStatgrabKstatOpenError, "%s", sg_str_error(err_num));
+    case SG_ERROR_KSTAT_READ:
+      rb_raise(eStatgrabKstatReadError, "%s", sg_str_error(err_num));
+    case SG_ERROR_KVM_GETSWAPINFO:
+      rb_raise(eStatgrabKvmGetswapinfoError, "%s", sg_str_error(err_num));
+    case SG_ERROR_KVM_OPENFILES:
+      rb_raise(eStatgrabKvmOpenfilesError, "%s", sg_str_error(err_num));
+    case SG_ERROR_MALLOC:
+      rb_raise(eStatgrabMallocError, "%s", sg_str_error(err_num));
+    case SG_ERROR_MEMSTATUS:
+      rb_raise(eStatgrabMemstatusError, "%s", sg_str_error(err_num));
+    case SG_ERROR_OPEN:
+      rb_raise(eStatgrabOpenError, "%s", sg_str_error(err_num));
+    case SG_ERROR_OPENDIR:
+      rb_raise(eStatgrabOpendirError, "%s", sg_str_error(err_num));
+    case SG_ERROR_PARSE:
+      rb_raise(eStatgrabParseError, "%s", sg_str_error(err_num));
+    case SG_ERROR_PDHADD:
+      rb_raise(eStatgrabPdhaddError, "%s", sg_str_error(err_num));
+    case SG_ERROR_PDHCOLLECT:
+      rb_raise(eStatgrabPdhcollectError, "%s", sg_str_error(err_num));
+    case SG_ERROR_PDHOPEN:
+      rb_raise(eStatgrabPdhopenError, "%s", sg_str_error(err_num));
+    case SG_ERROR_PDHREAD:
+      rb_raise(eStatgrabPdhreadError, "%s", sg_str_error(err_num));
+    case SG_ERROR_PERMISSION:
+      rb_raise(eStatgrabPermissionError, "%s", sg_str_error(err_num));
+    case SG_ERROR_PSTAT:
+      rb_raise(eStatgrabPstatError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SETEGID:
+      rb_raise(eStatgrabSetegidError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SETEUID:
+      rb_raise(eStatgrabSeteuidError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SETMNTENT:
+      rb_raise(eStatgrabSetmntentError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SOCKET:
+      rb_raise(eStatgrabSocketError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SWAPCTL:
+      rb_raise(eStatgrabSwapctlError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SYSCONF:
+      rb_raise(eStatgrabSysconfError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SYSCTL:
+      rb_raise(eStatgrabSysctlError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SYSCTLBYNAME:
+      rb_raise(eStatgrabSysctlbynameError, "%s", sg_str_error(err_num));
+    case SG_ERROR_SYSCTLNAMETOMIB:
+      rb_raise(eStatgrabSysctlnametomibError, "%s", sg_str_error(err_num));
+    case SG_ERROR_UNAME:
+      rb_raise(eStatgrabUnameError, "%s", sg_str_error(err_num));
+    case SG_ERROR_UNSUPPORTED:
+      rb_raise(eStatgrabUnsupportedError, "%s", sg_str_error(err_num));
+    case SG_ERROR_XSW_VER_MISMATCH:
+      rb_raise(eStatgrabXswVerMismatchError, "%s", sg_str_error(err_num));
+  }
+}
 
 static VALUE statgrab_initialize(VALUE self, VALUE args) {
   if(sg_init())
-    rb_raise(eStatgrabError, "sg_init() failed: %s", sg_str_error(sg_get_error()));
+    statgrab_handle_error();
 
-  if(rb_ary_shift(args) != Qfalse)
-    if(sg_drop_privileges())
-      rb_raise(eStatgrabError, "sg_drop_privileges() failed: %s", sg_str_error(sg_get_error()));
+  if(rb_ary_shift(args) != Qfalse && sg_drop_privileges())
+    statgrab_handle_error();
 
   return self;
 }
@@ -23,8 +149,8 @@ static VALUE statgrab_cpu_stats(VALUE self) {
   VALUE info;
 
   stats = sg_get_cpu_stats();
-  if(stats == NULL)
-    rb_raise(eStatgrabError, "sg_get_cpu_stats() failed: %s", sg_str_error(sg_get_error()));
+  if(stats==NULL)
+    statgrab_handle_error();
 
   info = rb_hash_new();
   rb_hash_aset(info, ID2SYM(rb_intern("user")), INT2NUM(stats->user));
@@ -47,8 +173,8 @@ static VALUE statgrab_cpu_stats_diff(VALUE self) {
   VALUE info;
 
   stats = sg_get_cpu_stats_diff();
-  if(stats == NULL)
-    rb_raise(eStatgrabError, "sg_get_cpu_stats_diff() failed: %s", sg_str_error(sg_get_error()));
+  if(stats==NULL)
+    statgrab_handle_error();
 
   info = rb_hash_new();
   rb_hash_aset(info, ID2SYM(rb_intern("user")), INT2NUM(stats->user));
@@ -72,8 +198,8 @@ static VALUE statgrab_cpu_percents(VALUE self) {
   VALUE info;
 
   percents = sg_get_cpu_percents();
-  if(percents == NULL)
-    rb_raise(eStatgrabError, "sg_get_cpu_percents() failed: %s", sg_str_error(sg_get_error()));
+  if(percents==NULL)
+    statgrab_handle_error();
 
   info = rb_hash_new();
   rb_hash_aset(info, ID2SYM(rb_intern("user")), rb_float_new(percents->user));
@@ -93,7 +219,46 @@ static VALUE statgrab_cpu_percents(VALUE self) {
 
 void Init_statgrab() {
   cStatgrab = rb_define_class("Statgrab", rb_cObject);
-  eStatgrabError = rb_define_class("StatgrabError", rb_eException);
+  eStatgrabException = rb_define_class_under(cStatgrab, "Exception", rb_eException);
+  eStatgrabAsprintfError = rb_define_class_under(cStatgrab, "AsprintfError", eStatgrabException);
+  eStatgrabDevicesError = rb_define_class_under(cStatgrab, "DevicesError", eStatgrabException);
+  eStatgrabDevstatGetdevsError = rb_define_class_under(cStatgrab, "DevstatGetdevsError", eStatgrabException);
+  eStatgrabDevstatSelectdevsError = rb_define_class_under(cStatgrab, "DevstatSelectdevsError", eStatgrabException);
+  eStatgrabDiskinfoError = rb_define_class_under(cStatgrab, "DiskinfoError", eStatgrabException);
+  eStatgrabEnoentError = rb_define_class_under(cStatgrab, "EnoentError", eStatgrabException);
+  eStatgrabGetifaddrsError = rb_define_class_under(cStatgrab, "GetifaddrsError", eStatgrabException);
+  eStatgrabGetmntinfoError = rb_define_class_under(cStatgrab, "GetmntinfoError", eStatgrabException);
+  eStatgrabGetpagesizeError = rb_define_class_under(cStatgrab, "GetpagesizeError", eStatgrabException);
+  eStatgrabHostError = rb_define_class_under(cStatgrab, "HostError", eStatgrabException);
+  eStatgrabKstatDataLookupError = rb_define_class_under(cStatgrab, "KstatDataLookupError", eStatgrabException);
+  eStatgrabKstatLookupError = rb_define_class_under(cStatgrab, "KstatLookupError", eStatgrabException);
+  eStatgrabKstatOpenError = rb_define_class_under(cStatgrab, "KstatOpenError", eStatgrabException);
+  eStatgrabKstatReadError = rb_define_class_under(cStatgrab, "KstatReadError", eStatgrabException);
+  eStatgrabKvmGetswapinfoError = rb_define_class_under(cStatgrab, "KvmGetswapinfoError", eStatgrabException);
+  eStatgrabKvmOpenfilesError = rb_define_class_under(cStatgrab, "KvmOpenfilesError", eStatgrabException);
+  eStatgrabMallocError = rb_define_class_under(cStatgrab, "MallocError", eStatgrabException);
+  eStatgrabMemstatusError = rb_define_class_under(cStatgrab, "MemstatusError", eStatgrabException);
+  eStatgrabOpenError = rb_define_class_under(cStatgrab, "OpenError", eStatgrabException);
+  eStatgrabOpendirError = rb_define_class_under(cStatgrab, "OpendirError", eStatgrabException);
+  eStatgrabParseError = rb_define_class_under(cStatgrab, "ParseError", eStatgrabException);
+  eStatgrabPdhaddError = rb_define_class_under(cStatgrab, "PdhaddError", eStatgrabException);
+  eStatgrabPdhcollectError = rb_define_class_under(cStatgrab, "PdhcollectError", eStatgrabException);
+  eStatgrabPdhopenError = rb_define_class_under(cStatgrab, "PdhopenError", eStatgrabException);
+  eStatgrabPdhreadError = rb_define_class_under(cStatgrab, "PdhreadError", eStatgrabException);
+  eStatgrabPermissionError = rb_define_class_under(cStatgrab, "PermissionError", eStatgrabException);
+  eStatgrabPstatError = rb_define_class_under(cStatgrab, "PstatError", eStatgrabException);
+  eStatgrabSetegidError = rb_define_class_under(cStatgrab, "SetegidError", eStatgrabException);
+  eStatgrabSeteuidError = rb_define_class_under(cStatgrab, "SeteuidError", eStatgrabException);
+  eStatgrabSetmntentError = rb_define_class_under(cStatgrab, "SetmntentError", eStatgrabException);
+  eStatgrabSocketError = rb_define_class_under(cStatgrab, "SocketError", eStatgrabException);
+  eStatgrabSwapctlError = rb_define_class_under(cStatgrab, "SwapctlError", eStatgrabException);
+  eStatgrabSysconfError = rb_define_class_under(cStatgrab, "SysconfError", eStatgrabException);
+  eStatgrabSysctlError = rb_define_class_under(cStatgrab, "SysctlError", eStatgrabException);
+  eStatgrabSysctlbynameError = rb_define_class_under(cStatgrab, "SysctlbynameError", eStatgrabException);
+  eStatgrabSysctlnametomibError = rb_define_class_under(cStatgrab, "SysctlnametomibError", eStatgrabException);
+  eStatgrabUnameError = rb_define_class_under(cStatgrab, "UnameError", eStatgrabException);
+  eStatgrabUnsupportedError = rb_define_class_under(cStatgrab, "UnsupportedError", eStatgrabException);
+  eStatgrabXswVerMismatchError = rb_define_class_under(cStatgrab, "XswVerMismatchError", eStatgrabException);
   rb_define_method(cStatgrab, "initialize", statgrab_initialize, -2);
   rb_define_method(cStatgrab, "cpu_stats", statgrab_cpu_stats, 0);
   rb_define_method(cStatgrab, "cpu_stats_diff", statgrab_cpu_stats_diff, 0);

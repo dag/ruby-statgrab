@@ -20,13 +20,60 @@ Optionally, you may build a Rubygem:
 API
 ---
 
-Every method raises a `StatgrabError` on failure. The `new`
-method takes a `false` argument to skip privileges dropping.
-All instance methods return symbol hashes corresponding to
-their libstatgrab struct counterparts (sometimes with added
+The `new` method takes a `false` argument to skip privileges
+dropping. All instance methods return symbol hashes corresponding
+to their libstatgrab struct counterparts (sometimes with added
 Ruby goodies).
 
-Instance methods:
+### Exceptions
+
+All exceptions are defined under the `Statgrab` namespace and
+inherit from `Statgrab::Exception`, so to capture all errors
+related to statgrab you can rescue that parent exception.
+
+Here is a list of all exceptions in the `Statgrab` namespace:
+
+- `AsprintfError`
+- `DevicesError`
+- `DevstatGetdevsError`
+- `DevstatSelectdevsError`
+- `DiskinfoError`
+- `EnoentError`
+- `GetifaddrsError`
+- `GetmntinfoError`
+- `GetpagesizeError`
+- `HostError`
+- `KstatDataLookupError`
+- `KstatLookupError`
+- `KstatOpenError`
+- `KstatReadError`
+- `KvmGetswapinfoError`
+- `KvmOpenfilesError`
+- `MallocError`
+- `MemstatusError`
+- `OpenError`
+- `OpendirError`
+- `ParseError`
+- `PdhaddError`
+- `PdhcollectError`
+- `PdhopenError`
+- `PdhreadError`
+- `PermissionError`
+- `PstatError`
+- `SetegidError`
+- `SeteuidError`
+- `SetmntentError`
+- `SocketError`
+- `SwapctlError`
+- `SysconfError`
+- `SysctlError`
+- `SysctlbynameError`
+- `SysctlnametomibError`
+- `UnameError`
+- `UnsupportedError`
+- `XswVerMismatchError`
+
+### Instance methods
 
 - `cpu_stats`
 - `cpu_stats_diff`
@@ -36,8 +83,12 @@ Sample program
 --------------
 
     require 'statgrab'
-    sg = Statgrab.new
-    puts "CPU Usage: %.1f%%" % sg.cpu_percents[:user]
+    begin
+      sg = Statgrab.new
+      puts "CPU Usage: %.1f%%" % sg.cpu_percents[:user]
+    rescue Statgrab::Exception => e
+      puts "Error! %s" % e.message
+    end
 
 Licensing
 ---------
