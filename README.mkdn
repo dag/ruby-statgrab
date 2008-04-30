@@ -15,7 +15,7 @@ Optionally, you may build a Rubygem:
 
     gem build statgrab.gemspec
     su
-    gem install statgrab-1.0.gem
+    gem install statgrab-0.1.gem
 
 API
 ---
