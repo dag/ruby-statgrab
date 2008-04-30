@@ -5,14 +5,15 @@
 #include <statgrab.h>
 
 VALUE cStatgrab;
+VALUE eStatgrabError;
 
 static VALUE statgrab_initialize(VALUE self, VALUE args) {
   if(sg_init())
-    rb_raise(rb_eRuntimeError, "sg_init() failed: %s", sg_str_error(sg_get_error()));
+    rb_raise(eStatgrabError, "sg_init() failed: %s", sg_str_error(sg_get_error()));
 
   if(rb_ary_shift(args) != Qfalse)
     if(sg_drop_privileges())
-      rb_raise(rb_eRuntimeError, "sg_drop_privileges() failed: %s", sg_str_error(sg_get_error()));
+      rb_raise(eStatgrabError, "sg_drop_privileges() failed: %s", sg_str_error(sg_get_error()));
 
   return self;
 }
@@ -41,6 +42,7 @@ static VALUE statgrab_cpu_percents(VALUE self) {
 
 void Init_statgrab() {
   cStatgrab = rb_define_class("Statgrab", rb_cObject);
+  eStatgrabError = rb_define_class("StatgrabError", rb_eException);
   rb_define_method(cStatgrab, "initialize", statgrab_initialize, -2);
   rb_define_method(cStatgrab, "cpu_percents", statgrab_cpu_percents, 0);
 }
