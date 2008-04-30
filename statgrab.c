@@ -23,8 +23,10 @@ static VALUE statgrab_cpu_percents(VALUE self) {
   VALUE info;
 
   percents = sg_get_cpu_percents();
-  info = rb_hash_new();
+  if(percents == NULL)
+    rb_raise(eStatgrabError, "sg_get_cpu_percents() failed: %s", sg_str_error(sg_get_error()));
 
+  info = rb_hash_new();
   rb_hash_aset(info, ID2SYM(rb_intern("user")), rb_float_new(percents->user));
   rb_hash_aset(info, ID2SYM(rb_intern("kernel")), rb_float_new(percents->kernel));
   rb_hash_aset(info, ID2SYM(rb_intern("idle")), rb_float_new(percents->idle));
