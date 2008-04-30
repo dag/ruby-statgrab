@@ -42,6 +42,31 @@ static VALUE statgrab_cpu_stats(VALUE self) {
   return info;
 }
 
+static VALUE statgrab_cpu_stats_diff(VALUE self) {
+  sg_cpu_stats *stats;
+  VALUE info;
+
+  stats = sg_get_cpu_stats_diff();
+  if(stats == NULL)
+    rb_raise(eStatgrabError, "sg_get_cpu_stats_diff() failed: %s", sg_str_error(sg_get_error()));
+
+  info = rb_hash_new();
+  rb_hash_aset(info, ID2SYM(rb_intern("user")), INT2NUM(stats->user));
+  rb_hash_aset(info, ID2SYM(rb_intern("kernel")), INT2NUM(stats->kernel));
+  rb_hash_aset(info, ID2SYM(rb_intern("idle")), INT2NUM(stats->idle));
+  rb_hash_aset(info, ID2SYM(rb_intern("iowait")), INT2NUM(stats->iowait));
+  rb_hash_aset(info, ID2SYM(rb_intern("swap")), INT2NUM(stats->swap));
+  rb_hash_aset(info, ID2SYM(rb_intern("nice")), INT2NUM(stats->nice));
+  rb_hash_aset(info, ID2SYM(rb_intern("systime")), INT2NUM(stats->systime));
+
+  VALUE time_at;
+  time_at = rb_funcall(rb_cTime, rb_intern("at"), 1, INT2NUM(stats->systime));
+  rb_hash_aset(info, ID2SYM(rb_intern("time")), time_at);
+
+  return info;
+}
+
+
 static VALUE statgrab_cpu_percents(VALUE self) {
   sg_cpu_percents *percents;
   VALUE info;
@@ -71,5 +96,6 @@ void Init_statgrab() {
   eStatgrabError = rb_define_class("StatgrabError", rb_eException);
   rb_define_method(cStatgrab, "initialize", statgrab_initialize, -2);
   rb_define_method(cStatgrab, "cpu_stats", statgrab_cpu_stats, 0);
+  rb_define_method(cStatgrab, "cpu_stats_diff", statgrab_cpu_stats_diff, 0);
   rb_define_method(cStatgrab, "cpu_percents", statgrab_cpu_percents, 0);
 }
