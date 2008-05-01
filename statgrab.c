@@ -286,6 +286,41 @@ static VALUE statgrab_disk_io_stats_diff(VALUE self) {
   return arr;
 }
 
+static VALUE statgrab_fs_stats(VALUE self) {
+  int entries, i;
+  sg_fs_stats *stats;
+  VALUE arr, info;
+
+  stats = sg_get_fs_stats(&entries);
+  if(stats==NULL)
+    statgrab_handle_error();
+
+  arr = rb_ary_new();
+  for(i = 0; i < entries; i++) {
+    info = rb_hash_new();
+    rb_hash_aset(info, ID2SYM(rb_intern("device_name")), rb_str_new2(stats[i].device_name));
+    rb_hash_aset(info, ID2SYM(rb_intern("fs_type")), rb_str_new2(stats[i].fs_type));
+    rb_hash_aset(info, ID2SYM(rb_intern("mnt_point")), rb_str_new2(stats[i].mnt_point));
+    rb_hash_aset(info, ID2SYM(rb_intern("size")), INT2NUM(stats[i].size));
+    rb_hash_aset(info, ID2SYM(rb_intern("used")), INT2NUM(stats[i].used));
+    rb_hash_aset(info, ID2SYM(rb_intern("avail")), INT2NUM(stats[i].avail));
+    rb_hash_aset(info, ID2SYM(rb_intern("total_inodes")), INT2NUM(stats[i].total_inodes));
+    rb_hash_aset(info, ID2SYM(rb_intern("used_inodes")), INT2NUM(stats[i].used_inodes));
+    rb_hash_aset(info, ID2SYM(rb_intern("free_inodes")), INT2NUM(stats[i].free_inodes));
+    rb_hash_aset(info, ID2SYM(rb_intern("avail_blocks")), INT2NUM(stats[i].avail_blocks));
+    rb_hash_aset(info, ID2SYM(rb_intern("io_size")), INT2NUM(stats[i].io_size));
+    rb_hash_aset(info, ID2SYM(rb_intern("block_size")), INT2NUM(stats[i].block_size));
+    rb_hash_aset(info, ID2SYM(rb_intern("total_blocks")), INT2NUM(stats[i].total_blocks));
+    rb_hash_aset(info, ID2SYM(rb_intern("free_blocks")), INT2NUM(stats[i].free_blocks));
+    rb_hash_aset(info, ID2SYM(rb_intern("used_blocks")), INT2NUM(stats[i].used_blocks));
+    rb_hash_aset(info, ID2SYM(rb_intern("avail_blocks")), INT2NUM(stats[i].avail_blocks));
+
+    rb_ary_push(arr, info);
+  }
+
+  return arr;
+}
+
 void Init_statgrab() {
   cStatgrab = rb_define_class("Statgrab", rb_cObject);
   eStatgrabException = rb_define_class_under(cStatgrab, "Exception", rb_eException);
@@ -334,4 +369,5 @@ void Init_statgrab() {
   rb_define_method(cStatgrab, "cpu_percents", statgrab_cpu_percents, 0);
   rb_define_method(cStatgrab, "disk_io_stats", statgrab_disk_io_stats, 0);
   rb_define_method(cStatgrab, "disk_io_stats_diff", statgrab_disk_io_stats_diff, 0);
+  rb_define_method(cStatgrab, "fs_stats", statgrab_fs_stats, 0);
 }
