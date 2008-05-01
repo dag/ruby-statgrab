@@ -96,7 +96,8 @@ supplied with libstatgrab as manual pages:
     man sg_get_<method>
 
 Where `<method>` is not an alias. Also remember all
-structs are represented as symbol hashes.
+structs are represented as symbol hashes, and any bytes
+are converted to kilobytes.
 
 Sample program
 --------------

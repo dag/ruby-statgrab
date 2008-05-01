@@ -245,8 +245,8 @@ static VALUE statgrab_disk_io_stats(VALUE self) {
   for(i = 0; i < entries; i++) {
     info = rb_hash_new();
     rb_hash_aset(info, ID2SYM(rb_intern("disk_name")), rb_str_new2(stats[i].disk_name));
-    rb_hash_aset(info, ID2SYM(rb_intern("read_bytes")), INT2NUM(stats[i].read_bytes));
-    rb_hash_aset(info, ID2SYM(rb_intern("write_bytes")), INT2NUM(stats[i].write_bytes));
+    rb_hash_aset(info, ID2SYM(rb_intern("read_bytes")), INT2NUM(stats[i].read_bytes/1024));
+    rb_hash_aset(info, ID2SYM(rb_intern("write_bytes")), INT2NUM(stats[i].write_bytes/1024));
     rb_hash_aset(info, ID2SYM(rb_intern("systime")), INT2NUM(stats[i].systime));
 
     VALUE time_at;
@@ -272,8 +272,8 @@ static VALUE statgrab_disk_io_stats_diff(VALUE self) {
   for(i = 0; i < entries; i++) {
     info = rb_hash_new();
     rb_hash_aset(info, ID2SYM(rb_intern("disk_name")), rb_str_new2(stats[i].disk_name));
-    rb_hash_aset(info, ID2SYM(rb_intern("read_bytes")), INT2NUM(stats[i].read_bytes));
-    rb_hash_aset(info, ID2SYM(rb_intern("write_bytes")), INT2NUM(stats[i].write_bytes));
+    rb_hash_aset(info, ID2SYM(rb_intern("read_bytes")), INT2NUM(stats[i].read_bytes/1024));
+    rb_hash_aset(info, ID2SYM(rb_intern("write_bytes")), INT2NUM(stats[i].write_bytes/1024));
     rb_hash_aset(info, ID2SYM(rb_intern("systime")), INT2NUM(stats[i].systime));
 
     VALUE time_now;
@@ -301,9 +301,9 @@ static VALUE statgrab_fs_stats(VALUE self) {
     rb_hash_aset(info, ID2SYM(rb_intern("device_name")), rb_str_new2(stats[i].device_name));
     rb_hash_aset(info, ID2SYM(rb_intern("fs_type")), rb_str_new2(stats[i].fs_type));
     rb_hash_aset(info, ID2SYM(rb_intern("mnt_point")), rb_str_new2(stats[i].mnt_point));
-    rb_hash_aset(info, ID2SYM(rb_intern("size")), INT2NUM(stats[i].size));
-    rb_hash_aset(info, ID2SYM(rb_intern("used")), INT2NUM(stats[i].used));
-    rb_hash_aset(info, ID2SYM(rb_intern("avail")), INT2NUM(stats[i].avail));
+    rb_hash_aset(info, ID2SYM(rb_intern("size")), INT2NUM(stats[i].size/1024));
+    rb_hash_aset(info, ID2SYM(rb_intern("used")), INT2NUM(stats[i].used/1024));
+    rb_hash_aset(info, ID2SYM(rb_intern("avail")), INT2NUM(stats[i].avail/1024));
     rb_hash_aset(info, ID2SYM(rb_intern("total_inodes")), INT2NUM(stats[i].total_inodes));
     rb_hash_aset(info, ID2SYM(rb_intern("used_inodes")), INT2NUM(stats[i].used_inodes));
     rb_hash_aset(info, ID2SYM(rb_intern("free_inodes")), INT2NUM(stats[i].free_inodes));
