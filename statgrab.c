@@ -365,9 +365,15 @@ void Init_statgrab() {
   eStatgrabXswVerMismatchError = rb_define_class_under(cStatgrab, "XswVerMismatchError", eStatgrabException);
   rb_define_method(cStatgrab, "initialize", statgrab_initialize, -2);
   rb_define_method(cStatgrab, "cpu_stats", statgrab_cpu_stats, 0);
+  rb_define_method(cStatgrab, "cpu", statgrab_cpu_stats, 0);
   rb_define_method(cStatgrab, "cpu_stats_diff", statgrab_cpu_stats_diff, 0);
+  rb_define_method(cStatgrab, "cpu_difference", statgrab_cpu_stats_diff, 0);
   rb_define_method(cStatgrab, "cpu_percents", statgrab_cpu_percents, 0);
   rb_define_method(cStatgrab, "disk_io_stats", statgrab_disk_io_stats, 0);
+  rb_define_method(cStatgrab, "disk_io", statgrab_disk_io_stats, 0);
   rb_define_method(cStatgrab, "disk_io_stats_diff", statgrab_disk_io_stats_diff, 0);
+  rb_define_method(cStatgrab, "disk_io_difference", statgrab_disk_io_stats_diff, 0);
   rb_define_method(cStatgrab, "fs_stats", statgrab_fs_stats, 0);
+  rb_define_method(cStatgrab, "fs", statgrab_fs_stats, 0);
+  rb_define_method(cStatgrab, "file_system", statgrab_fs_stats, 0);
 }

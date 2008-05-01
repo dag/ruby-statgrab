@@ -79,24 +79,24 @@ Here is a list of all exceptions in the `Statgrab` namespace:
 
 ### Instance methods
 
-- `cpu_stats`
-- `cpu_stats_diff`
+Methods are named as in libstatgrab but without the `sg_get_`
+prefix, and some also have aliases, usually either shorter
+or more rubyistic.
+
+- `cpu_stats`, `cpu`
+- `cpu_stats_diff`, `cpu_difference`
 - `cpu_percents`
-- `disk_io_stats`
-- `disk_io_stats_diff`
-- `fs_stats`
+- `disk_io_stats`, `disk_io`
+- `disk_io_stats_diff`, `disk_io_difference`
+- `fs_stats`, `fs`, `file_system`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:
 
     man sg_get_<method>
 
-Just remember all structs are represented as symbol hashes.
-If you prefer a more struct-like behavior, use `ostruct`:
-
-    require 'ostruct'
-    percents = OpenStruct.new(sg.cpu_percents)
-    puts percents.user
+Where `<method>` is not an alias. Also remember all
+structs are represented as symbol hashes.
 
 Sample program
 --------------
