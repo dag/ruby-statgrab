@@ -217,6 +217,33 @@ static VALUE statgrab_cpu_percents(VALUE self) {
   return info;
 }
 
+static VALUE statgrab_disk_io_stats(VALUE self) {
+  int entries, i;
+  sg_disk_io_stats *stats;
+  VALUE arr, info;
+
+  stats = sg_get_disk_io_stats(&entries);
+  if(stats==NULL)
+    statgrab_handle_error();
+
+  arr = rb_ary_new();
+  for(i = 0; i < entries; i++) {
+    info = rb_hash_new();
+    rb_hash_aset(info, ID2SYM(rb_intern("disk_name")), rb_str_new2(stats[i].disk_name));
+    rb_hash_aset(info, ID2SYM(rb_intern("read_bytes")), INT2NUM(stats[i].read_bytes));
+    rb_hash_aset(info, ID2SYM(rb_intern("write_bytes")), INT2NUM(stats[i].write_bytes));
+    rb_hash_aset(info, ID2SYM(rb_intern("systime")), INT2NUM(stats[i].systime));
+
+    VALUE time_at;
+    time_at = rb_funcall(rb_cTime, rb_intern("at"), 1, INT2NUM(stats[i].systime));
+    rb_hash_aset(info, ID2SYM(rb_intern("time")), time_at);
+
+    rb_ary_push(arr, info);
+  }
+
+  return arr;
+}
+
 void Init_statgrab() {
   cStatgrab = rb_define_class("Statgrab", rb_cObject);
   eStatgrabException = rb_define_class_under(cStatgrab, "Exception", rb_eException);
@@ -263,4 +290,5 @@ void Init_statgrab() {
   rb_define_method(cStatgrab, "cpu_stats", statgrab_cpu_stats, 0);
   rb_define_method(cStatgrab, "cpu_stats_diff", statgrab_cpu_stats_diff, 0);
   rb_define_method(cStatgrab, "cpu_percents", statgrab_cpu_percents, 0);
+  rb_define_method(cStatgrab, "disk_io_stats", statgrab_disk_io_stats, 0);
 }

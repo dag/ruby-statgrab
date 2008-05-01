@@ -25,9 +25,9 @@ API
 ---
 
 The `new` method takes a `false` argument to skip privileges
-dropping. All instance methods return symbol hashes corresponding
-to their libstatgrab struct counterparts (sometimes with added
-Ruby goodies).
+dropping. All instance methods return symbol hashes or arrays
+of symbol hashes corresponding to their libstatgrab struct
+counterparts (sometimes with added Ruby goodies).
 
 ### Exceptions
 
@@ -82,6 +82,7 @@ Here is a list of all exceptions in the `Statgrab` namespace:
 - `cpu_stats`
 - `cpu_stats_diff`
 - `cpu_percents`
+- `disk_io_stats`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:
