@@ -83,6 +83,7 @@ Here is a list of all exceptions in the `Statgrab` namespace:
 - `cpu_stats_diff`
 - `cpu_percents`
 - `disk_io_stats`
+- `disk_io_stats_diff`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:
