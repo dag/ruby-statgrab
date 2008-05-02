@@ -230,7 +230,7 @@ static VALUE
 statgrab_cpu_stats(VALUE self)
 {
 	sg_cpu_stats *stats;
-	VALUE info;
+	VALUE info, time_at;
 
 	stats = sg_get_cpu_stats();
 	if (stats == NULL)
@@ -248,7 +248,6 @@ statgrab_cpu_stats(VALUE self)
 	rb_hash_aset(info, ID2SYM(rb_intern("systime")),
 			INT2NUM(stats->systime));
 
-	VALUE time_at;
 	time_at = rb_funcall(rb_cTime, rb_intern("at"), 1,
 			INT2NUM(stats->systime));
 	rb_hash_aset(info, ID2SYM(rb_intern("time")), time_at);
@@ -260,7 +259,7 @@ static VALUE
 statgrab_cpu_stats_diff(VALUE self)
 {
 	sg_cpu_stats *stats;
-	VALUE info;
+	VALUE info, time_at;
 
 	stats = sg_get_cpu_stats_diff();
 	if (stats == NULL)
@@ -278,7 +277,6 @@ statgrab_cpu_stats_diff(VALUE self)
 	rb_hash_aset(info, ID2SYM(rb_intern("systime")),
 			INT2NUM(stats->systime));
 
-	VALUE time_at;
 	time_at = rb_funcall(rb_cTime, rb_intern("at"), 1,
 			INT2NUM(stats->systime));
 	rb_hash_aset(info, ID2SYM(rb_intern("time")), time_at);
@@ -291,7 +289,7 @@ static VALUE
 statgrab_cpu_percents(VALUE self)
 {
 	sg_cpu_percents *percents;
-	VALUE info;
+	VALUE info, time_now;
 
 	percents = sg_get_cpu_percents();
 	if (percents == NULL)
@@ -313,7 +311,6 @@ statgrab_cpu_percents(VALUE self)
 	rb_hash_aset(info, ID2SYM(rb_intern("time_taken")),
 			INT2NUM(percents->time_taken));
 
-	VALUE time_now;
 	time_now = rb_funcall(rb_cTime, rb_intern("now"), 0);
 	rb_hash_aset(info, ID2SYM(rb_intern("last_call")),
 			rb_funcall(time_now, rb_intern("-"), 1,
@@ -327,7 +324,7 @@ statgrab_disk_io_stats(VALUE self)
 {
 	int entries, i;
 	sg_disk_io_stats *stats;
-	VALUE arr, info;
+	VALUE arr, info, time_at;
 
 	stats = sg_get_disk_io_stats(&entries);
 	if (stats == NULL)
@@ -345,7 +342,6 @@ statgrab_disk_io_stats(VALUE self)
 		rb_hash_aset(info, ID2SYM(rb_intern("systime")),
 				INT2NUM(stats[i].systime));
 
-		VALUE time_at;
 		time_at = rb_funcall(rb_cTime, rb_intern("at"), 1,
 				INT2NUM(stats[i].systime));
 		rb_hash_aset(info, ID2SYM(rb_intern("time")), time_at);
@@ -361,7 +357,7 @@ statgrab_disk_io_stats_diff(VALUE self)
 {
 	int entries, i;
 	sg_disk_io_stats *stats;
-	VALUE arr, info;
+	VALUE arr, info, time_now;
 
 	stats = sg_get_disk_io_stats_diff(&entries);
 	if (stats == NULL)
@@ -379,7 +375,6 @@ statgrab_disk_io_stats_diff(VALUE self)
 		rb_hash_aset(info, ID2SYM(rb_intern("systime")),
 				INT2NUM(stats[i].systime));
 
-		VALUE time_now;
 		time_now = rb_funcall(rb_cTime, rb_intern("now"), 0);
 		rb_hash_aset(info, ID2SYM(rb_intern("last_call")),
 				rb_funcall(time_now, rb_intern("-"), 1,
