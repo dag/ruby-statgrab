@@ -59,6 +59,11 @@ VALUE eStatgrabUnameError;
 VALUE eStatgrabUnsupportedError;
 VALUE eStatgrabXswVerMismatchError;
 
+/*
+ * Get the latest error from statgrab and, if there is one,
+ * raise the corresponding Ruby exception with the error message.
+ * Only used internally.
+ */
 static void
 statgrab_handle_error()
 {
@@ -442,7 +447,14 @@ statgrab_fs_stats(VALUE self)
 void
 Init_statgrab()
 {
+	/*
+	 * Main class
+	 */
 	cStatgrab = rb_define_class("Statgrab", rb_cObject);
+
+	/*
+	 * Exceptions
+	 */
 	eStatgrabException = rb_define_class_under(cStatgrab,
 			"Exception", rb_eException);
 	eStatgrabAsprintfError = rb_define_class_under(cStatgrab,
@@ -523,6 +535,10 @@ Init_statgrab()
 			"UnsupportedError", eStatgrabException);
 	eStatgrabXswVerMismatchError = rb_define_class_under(cStatgrab,
 			"XswVerMismatchError", eStatgrabException);
+
+	/*
+	 * Methods
+	 */
 	rb_define_method(cStatgrab, "initialize", statgrab_initialize, -2);
 	rb_define_method(cStatgrab, "cpu_stats", statgrab_cpu_stats, 0);
 	rb_define_method(cStatgrab, "cpu", statgrab_cpu_stats, 0);
