@@ -228,7 +228,7 @@ statgrab_cpu_stats(VALUE self)
 	VALUE info;
 
 	stats = sg_get_cpu_stats();
-	if (stats==NULL)
+	if (stats == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
