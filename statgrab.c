@@ -444,6 +444,38 @@ statgrab_fs_stats(VALUE self)
 	return arr;
 }
 
+static VALUE
+statgrab_host_info(VALUE self)
+{
+	sg_host_info *host;
+	VALUE info, time_now;
+
+	host = sg_get_host_info();
+	if (host == NULL)
+		statgrab_handle_error();
+
+	info = rb_hash_new();
+	rb_hash_aset(info, ID2SYM(rb_intern("os_name")),
+			rb_str_new2(host->os_name));
+	rb_hash_aset(info, ID2SYM(rb_intern("os_release")),
+			rb_str_new2(host->os_release));
+	rb_hash_aset(info, ID2SYM(rb_intern("os_version")),
+			rb_str_new2(host->os_version));
+	rb_hash_aset(info, ID2SYM(rb_intern("platform")),
+			rb_str_new2(host->platform));
+	rb_hash_aset(info, ID2SYM(rb_intern("hostname")),
+			rb_str_new2(host->hostname));
+	rb_hash_aset(info, ID2SYM(rb_intern("uptime")),
+			INT2NUM(host->uptime));
+
+	time_now = rb_funcall(rb_cTime, rb_intern("now"), 0);
+	rb_hash_aset(info, ID2SYM(rb_intern("booted")),
+			rb_funcall(time_now, rb_intern("-"), 1,
+				INT2NUM(host->uptime)));
+
+	return info;
+}
+
 void
 Init_statgrab()
 {
@@ -558,6 +590,9 @@ Init_statgrab()
 	rb_define_method(cStatgrab, "fs_stats", statgrab_fs_stats, 0);
 	rb_define_method(cStatgrab, "fs", statgrab_fs_stats, 0);
 	rb_define_method(cStatgrab, "file_system", statgrab_fs_stats, 0);
+	rb_define_method(cStatgrab, "host_info", statgrab_host_info, 0);
+	rb_define_method(cStatgrab, "host", statgrab_host_info, 0);
+	rb_define_method(cStatgrab, "system", statgrab_host_info, 0);
 }
 
 /*

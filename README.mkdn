@@ -89,6 +89,7 @@ or more rubyistic.
 - `disk_io_stats`, `disk_io`
 - `disk_io_stats_diff`, `disk_io_difference`
 - `fs_stats`, `fs`, `file_system`
+- `host_info`, `host`, `system`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:
