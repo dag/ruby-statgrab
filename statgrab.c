@@ -471,6 +471,27 @@ statgrab_host_info(VALUE self)
 	return info;
 }
 
+static VALUE
+statgrab_load_stats(VALUE self)
+{
+	sg_load_stats *load;
+	VALUE info;
+
+	load = sg_get_load_stats();
+	if (load == NULL)
+		statgrab_handle_error();
+
+	info = rb_hash_new();
+	rb_hash_aset(info, ID2SYM(rb_intern("min1")),
+			rb_float_new(load->min1));
+	rb_hash_aset(info, ID2SYM(rb_intern("min5")),
+			rb_float_new(load->min5));
+	rb_hash_aset(info, ID2SYM(rb_intern("min15")),
+			rb_float_new(load->min15));
+
+	return info;
+}
+
 void
 Init_statgrab()
 {
@@ -588,6 +609,11 @@ Init_statgrab()
 	rb_define_method(cStatgrab, "host_info", statgrab_host_info, 0);
 	rb_define_method(cStatgrab, "host", statgrab_host_info, 0);
 	rb_define_method(cStatgrab, "system", statgrab_host_info, 0);
+	rb_define_method(cStatgrab, "load_stats", statgrab_load_stats, 0);
+	rb_define_method(cStatgrab, "load", statgrab_load_stats, 0);
+	rb_define_method(cStatgrab, "loadavg", statgrab_load_stats, 0);
+	rb_define_method(cStatgrab, "load_average", statgrab_load_stats, 0);
+	rb_define_method(cStatgrab, "system_load", statgrab_load_stats, 0);
 }
 
 /*
