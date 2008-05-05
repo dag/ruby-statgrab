@@ -514,6 +514,27 @@ statgrab_mem_stats(VALUE self)
 	return info;
 }
 
+static VALUE
+statgrab_swap_stats(VALUE self)
+{
+	sg_swap_stats *stats;
+	VALUE info;
+
+	stats = sg_get_swap_stats();
+	if (stats == NULL)
+		statgrab_handle_error();
+
+	info = rb_hash_new();
+	rb_hash_aset(info, ID2SYM(rb_intern("total")),
+			INT2NUM(stats->total/1024));
+	rb_hash_aset(info, ID2SYM(rb_intern("used")),
+			INT2NUM(stats->used/1024));
+	rb_hash_aset(info, ID2SYM(rb_intern("free")),
+			INT2NUM(stats->free/1024));
+
+	return info;
+}
+
 void
 Init_statgrab()
 {
@@ -638,6 +659,8 @@ Init_statgrab()
 	rb_define_method(cStatgrab, "system_load", statgrab_load_stats, 0);
 	rb_define_method(cStatgrab, "mem_stats", statgrab_mem_stats, 0);
 	rb_define_method(cStatgrab, "memory", statgrab_mem_stats, 0);
+	rb_define_method(cStatgrab, "swap_stats", statgrab_swap_stats, 0);
+	rb_define_method(cStatgrab, "swap", statgrab_swap_stats, 0);
 }
 
 /*
