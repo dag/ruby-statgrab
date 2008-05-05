@@ -284,7 +284,6 @@ statgrab_cpu_stats_diff(VALUE self)
 	return info;
 }
 
-
 static VALUE
 statgrab_cpu_percents(VALUE self)
 {
