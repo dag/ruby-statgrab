@@ -91,6 +91,7 @@ or more rubyistic.
 - `fs_stats`, `fs`, `file_system`
 - `host_info`, `host`, `system`
 - `load_stats`, `load`, `loadavg`, `load_average`, `system_load`
+- `mem_stats`, `memory`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:
