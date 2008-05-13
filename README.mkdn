@@ -93,6 +93,7 @@ or more rubyistic.
 - `load_stats`, `load`, `loadavg`, `load_average`, `system_load`
 - `mem_stats`, `memory`
 - `swap_stats`, `swap`
+- `network_io_stats`, `network_io`, `net_io`, `network`, `net`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:
