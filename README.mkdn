@@ -94,6 +94,8 @@ or more rubyistic.
 - `mem_stats`, `memory`
 - `swap_stats`, `swap`
 - `network_io_stats`, `network_io`, `net_io`, `network`, `net`
+- `network_io_stats_diff`, `network_io_difference`, `network_difference`,
+`net_difference`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:

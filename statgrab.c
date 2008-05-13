@@ -578,6 +578,50 @@ statgrab_network_io_stats(VALUE self)
 	return arr;
 }
 
+static VALUE
+statgrab_network_io_stats_diff(VALUE self)
+{
+	int entries, i;
+	sg_network_io_stats *stats;
+	VALUE arr, info, time_now;
+
+	stats = sg_get_network_io_stats_diff(&entries);
+	if (stats == NULL)
+		statgrab_handle_error();
+
+	arr = rb_ary_new();
+	for (i = 0; i < entries; i++) {
+		info = rb_hash_new();
+		rb_hash_aset(info, ID2SYM(rb_intern("interface_name")),
+				rb_str_new2(stats[i].interface_name));
+		rb_hash_aset(info, ID2SYM(rb_intern("tx")),
+				INT2NUM(stats[i].tx/1024));
+		rb_hash_aset(info, ID2SYM(rb_intern("rx")),
+				INT2NUM(stats[i].rx/1024));
+		rb_hash_aset(info, ID2SYM(rb_intern("ipackets")),
+				INT2NUM(stats[i].ipackets));
+		rb_hash_aset(info, ID2SYM(rb_intern("opackets")),
+				INT2NUM(stats[i].opackets));
+		rb_hash_aset(info, ID2SYM(rb_intern("ierrors")),
+				INT2NUM(stats[i].ierrors));
+		rb_hash_aset(info, ID2SYM(rb_intern("oerrors")),
+				INT2NUM(stats[i].oerrors));
+		rb_hash_aset(info, ID2SYM(rb_intern("collisions")),
+				INT2NUM(stats[i].collisions));
+		rb_hash_aset(info, ID2SYM(rb_intern("systime")),
+				INT2NUM(stats[i].systime));
+
+		time_now = rb_funcall(rb_cTime, rb_intern("now"), 0);
+		rb_hash_aset(info, ID2SYM(rb_intern("last_call")),
+				rb_funcall(time_now, rb_intern("-"), 1,
+					INT2NUM(stats[i].systime)));
+
+		rb_ary_push(arr, info);
+	}
+
+	return arr;
+}
+
 void
 Init_statgrab()
 {
@@ -711,6 +755,14 @@ Init_statgrab()
 	rb_define_method(cStatgrab, "net_io", statgrab_network_io_stats, 0);
 	rb_define_method(cStatgrab, "network", statgrab_network_io_stats, 0);
 	rb_define_method(cStatgrab, "net", statgrab_network_io_stats, 0);
+	rb_define_method(cStatgrab, "network_io_stats_diff",
+			statgrab_network_io_stats_diff, 0);
+	rb_define_method(cStatgrab, "network_io_difference",
+			statgrab_network_io_stats_diff, 0);
+	rb_define_method(cStatgrab, "network_difference",
+			statgrab_network_io_stats_diff, 0);
+	rb_define_method(cStatgrab, "net_difference",
+			statgrab_network_io_stats_diff, 0);
 }
 
 /*
