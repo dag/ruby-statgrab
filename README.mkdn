@@ -100,6 +100,7 @@ or more rubyistic.
 `net_difference`
 - `network_iface_stats`, `network_iface`, `net_iface`, `iface`
 - `page_stats`, `page`, `pages`
+- `page_stats_diff`, `page_difference`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:

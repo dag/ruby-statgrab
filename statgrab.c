@@ -692,6 +692,32 @@ statgrab_page_stats(VALUE self)
 	return info;
 }
 
+static VALUE
+statgrab_page_stats_diff(VALUE self)
+{
+	sg_page_stats *stats;
+	VALUE info, time_now;
+
+	stats = sg_get_page_stats_diff();
+	if (stats == NULL)
+		statgrab_handle_error();
+
+	info = rb_hash_new();
+	rb_hash_aset(info, ID2SYM(rb_intern("pages_pagein")),
+			INT2NUM(stats->pages_pagein));
+	rb_hash_aset(info, ID2SYM(rb_intern("pages_pageout")),
+			INT2NUM(stats->pages_pageout));
+	rb_hash_aset(info, ID2SYM(rb_intern("systime")),
+			INT2NUM(stats->systime));
+
+	time_now = rb_funcall(rb_cTime, rb_intern("now"), 0);
+	rb_hash_aset(info, ID2SYM(rb_intern("last_call")),
+			rb_funcall(time_now, rb_intern("-"), 1,
+				INT2NUM(stats->systime)));
+
+	return info;
+}
+
 void
 Init_statgrab()
 {
@@ -844,6 +870,10 @@ Init_statgrab()
 	rb_define_method(cStatgrab, "page_stats", statgrab_page_stats, 0);
 	rb_define_method(cStatgrab, "page", statgrab_page_stats, 0);
 	rb_define_method(cStatgrab, "pages", statgrab_page_stats, 0);
+	rb_define_method(cStatgrab, "page_stats_diff",
+			statgrab_page_stats_diff, 0);
+	rb_define_method(cStatgrab, "page_difference",
+			statgrab_page_stats_diff, 0);
 }
 
 /*
