@@ -622,6 +622,51 @@ statgrab_network_io_stats_diff(VALUE self)
 	return arr;
 }
 
+static VALUE
+statgrab_network_iface_stats(VALUE self)
+{
+	int entries, i;
+	sg_network_iface_stats *stats;
+	VALUE arr, info;
+
+	stats = sg_get_network_iface_stats(&entries);
+	if (stats == NULL)
+		statgrab_handle_error();
+
+	arr = rb_ary_new();
+	for (i = 0; i < entries; i++) {
+		info = rb_hash_new();
+		rb_hash_aset(info, ID2SYM(rb_intern("interface_name")),
+				rb_str_new2(stats[i].interface_name));
+		rb_hash_aset(info, ID2SYM(rb_intern("speed")),
+				INT2FIX(stats[i].speed));
+
+		switch(stats[i].duplex) {
+		case SG_IFACE_DUPLEX_FULL:
+			rb_hash_aset(info, ID2SYM(rb_intern("duplex")),
+					ID2SYM(rb_intern("full")));
+			break;
+		case SG_IFACE_DUPLEX_HALF:
+			rb_hash_aset(info, ID2SYM(rb_intern("duplex")),
+					ID2SYM(rb_intern("half")));
+			break;
+		case SG_IFACE_DUPLEX_UNKNOWN:
+			rb_hash_aset(info, ID2SYM(rb_intern("duplex")),
+					ID2SYM(rb_intern("unknown")));
+			break;
+		}
+
+		if (stats[i].up)
+			rb_hash_aset(info, ID2SYM(rb_intern("up")), Qtrue);
+		else
+			rb_hash_aset(info, ID2SYM(rb_intern("up")), Qfalse);
+
+		rb_ary_push(arr, info);
+	}
+
+	return arr;
+}
+
 void
 Init_statgrab()
 {
@@ -763,6 +808,14 @@ Init_statgrab()
 			statgrab_network_io_stats_diff, 0);
 	rb_define_method(cStatgrab, "net_difference",
 			statgrab_network_io_stats_diff, 0);
+	rb_define_method(cStatgrab, "network_iface_stats",
+			statgrab_network_iface_stats, 0);
+	rb_define_method(cStatgrab, "network_iface",
+			statgrab_network_iface_stats, 0);
+	rb_define_method(cStatgrab, "net_iface",
+			statgrab_network_iface_stats, 0);
+	rb_define_method(cStatgrab, "iface",
+			statgrab_network_iface_stats, 0);
 }
 
 /*

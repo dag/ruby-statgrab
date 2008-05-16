@@ -27,7 +27,9 @@ API
 The `new` method takes a `false` argument to skip privileges
 dropping. All instance methods return symbol hashes or arrays
 of symbol hashes corresponding to their libstatgrab struct
-counterparts (sometimes with added Ruby goodies).
+counterparts (sometimes with added Ruby goodies). `enum`
+datatypes are represented as lowercased symbols with namespacing
+cut off, e.g. `SG_IFACE_DUPLEX_FULL` is `:full`.
 
 ### Exceptions
 
@@ -96,6 +98,7 @@ or more rubyistic.
 - `network_io_stats`, `network_io`, `net_io`, `network`, `net`
 - `network_io_stats_diff`, `network_io_difference`, `network_difference`,
 `net_difference`
+- `network_iface_stats`, `network_iface`, `net_iface`, `iface`
 
 Somewhat relevant information is available for every method
 supplied with libstatgrab as manual pages:
