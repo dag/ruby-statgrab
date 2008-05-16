@@ -667,6 +667,31 @@ statgrab_network_iface_stats(VALUE self)
 	return arr;
 }
 
+static VALUE
+statgrab_page_stats(VALUE self)
+{
+	sg_page_stats *stats;
+	VALUE info, time_at;
+
+	stats = sg_get_page_stats();
+	if (stats == NULL)
+		statgrab_handle_error();
+
+	info = rb_hash_new();
+	rb_hash_aset(info, ID2SYM(rb_intern("pages_pagein")),
+			INT2NUM(stats->pages_pagein));
+	rb_hash_aset(info, ID2SYM(rb_intern("pages_pageout")),
+			INT2NUM(stats->pages_pageout));
+	rb_hash_aset(info, ID2SYM(rb_intern("systime")),
+			INT2NUM(stats->systime));
+
+	time_at = rb_funcall(rb_cTime, rb_intern("at"), 1,
+			INT2NUM(stats->systime));
+	rb_hash_aset(info, ID2SYM(rb_intern("time")), time_at);
+
+	return info;
+}
+
 void
 Init_statgrab()
 {
@@ -816,6 +841,9 @@ Init_statgrab()
 			statgrab_network_iface_stats, 0);
 	rb_define_method(cStatgrab, "iface",
 			statgrab_network_iface_stats, 0);
+	rb_define_method(cStatgrab, "page_stats", statgrab_page_stats, 0);
+	rb_define_method(cStatgrab, "page", statgrab_page_stats, 0);
+	rb_define_method(cStatgrab, "pages", statgrab_page_stats, 0);
 }
 
 /*
