@@ -778,6 +778,96 @@ statgrab_page_stats_diff(VALUE self)
 	return info;
 }
 
+/*
+ * Process statistics, see <tt>sg_get_process_stats(3)</tt> manpage.
+ *
+ * The +sg_process_compare_+ family of related functions is intentionally
+ * left out in this binding - it can be done with Enumerable#sort_by in Ruby.
+ * The following example corresponds to the <tt>qsort()</tt> example in the
+ * <tt>sg_get_process_stats(3)</tt> manpage:
+ *
+ *   ps.sort_by {|p| p[:pid] }
+ */
+static VALUE
+statgrab_process_stats(VALUE self)
+{
+	int entries, i;
+	sg_process_stats *stats;
+	VALUE arr, info, time_now;
+
+	stats = sg_get_process_stats(&entries);
+	if (stats == NULL)
+		statgrab_handle_error();
+
+	arr = rb_ary_new();
+	for (i = 0; i < entries; i++) {
+		info = rb_hash_new();
+		rb_hash_aset(info, ID2SYM(rb_intern("process_name")),
+				rb_str_new2(stats[i].process_name));
+
+		if (stats[i].proctitle != NULL)
+			rb_hash_aset(info, ID2SYM(rb_intern("proctitle")),
+					rb_str_new2(stats[i].proctitle));
+
+		rb_hash_aset(info, ID2SYM(rb_intern("pid")),
+				INT2FIX(stats[i].pid));
+		rb_hash_aset(info, ID2SYM(rb_intern("parent")),
+				INT2FIX(stats[i].parent));
+		rb_hash_aset(info, ID2SYM(rb_intern("pgid")),
+				INT2FIX(stats[i].pgid));
+		rb_hash_aset(info, ID2SYM(rb_intern("uid")),
+				INT2FIX(stats[i].uid));
+		rb_hash_aset(info, ID2SYM(rb_intern("euid")),
+				INT2FIX(stats[i].euid));
+		rb_hash_aset(info, ID2SYM(rb_intern("gid")),
+				INT2FIX(stats[i].gid));
+		rb_hash_aset(info, ID2SYM(rb_intern("egid")),
+				INT2FIX(stats[i].egid));
+		rb_hash_aset(info, ID2SYM(rb_intern("proc_size")),
+				INT2NUM(stats[i].proc_size/1024));
+		rb_hash_aset(info, ID2SYM(rb_intern("proc_resident")),
+				INT2NUM(stats[i].proc_resident/1024));
+		rb_hash_aset(info, ID2SYM(rb_intern("time_spent")),
+				INT2NUM(stats[i].time_spent));
+		rb_hash_aset(info, ID2SYM(rb_intern("cpu_percent")),
+				INT2NUM(stats[i].cpu_percent));
+		rb_hash_aset(info, ID2SYM(rb_intern("nice")),
+				INT2NUM(stats[i].nice));
+
+		switch(stats[i].state) {
+		case SG_PROCESS_STATE_RUNNING:
+			rb_hash_aset(info, ID2SYM(rb_intern("state")),
+					ID2SYM(rb_intern("running")));
+			break;
+		case SG_PROCESS_STATE_SLEEPING:
+			rb_hash_aset(info, ID2SYM(rb_intern("state")),
+					ID2SYM(rb_intern("sleeping")));
+			break;
+		case SG_PROCESS_STATE_STOPPED:
+			rb_hash_aset(info, ID2SYM(rb_intern("state")),
+					ID2SYM(rb_intern("stopped")));
+			break;
+		case SG_PROCESS_STATE_ZOMBIE:
+			rb_hash_aset(info, ID2SYM(rb_intern("state")),
+					ID2SYM(rb_intern("zombie")));
+			break;
+		case SG_PROCESS_STATE_UNKNOWN:
+			rb_hash_aset(info, ID2SYM(rb_intern("state")),
+					ID2SYM(rb_intern("unknown")));
+			break;
+		}
+
+		time_now = rb_funcall(rb_cTime, rb_intern("now"), 0);
+		rb_hash_aset(info, ID2SYM(rb_intern("started")),
+				rb_funcall(time_now, rb_intern("-"), 1,
+					INT2NUM(stats[i].time_spent)));
+
+		rb_ary_push(arr, info);
+	}
+
+	return arr;
+}
+
 void
 Init_statgrab()
 {
@@ -965,6 +1055,13 @@ Init_statgrab()
 	rb_define_method(cStatgrab, "page_stats_diff",
 			statgrab_page_stats_diff, 0);
 	rb_define_alias(cStatgrab, "page_difference", "page_stats_diff");
+
+	rb_define_method(cStatgrab, "process_stats",
+			statgrab_process_stats, 0);
+	rb_define_alias(cStatgrab, "process", "process_stats");
+	rb_define_alias(cStatgrab, "processes", "process_stats");
+	rb_define_alias(cStatgrab, "proc", "process_stats");
+	rb_define_alias(cStatgrab, "ps", "process_stats");
 }
 
 /*
