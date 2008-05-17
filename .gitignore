@@ -1,6 +1,8 @@
 *
+!.gitignore
 !LICENSE
 !README.mkdn
+!Rakefile
 !extconf.rb
 !statgrab.c
 !statgrab.gemspec

@@ -214,6 +214,13 @@ statgrab_handle_error()
 	}
 }
 
+/*
+ * call-seq:
+ *   Statgrab.new(drop_privileges=true)
+ *
+ * Set privileges and prepare connections, and then drop privileges.
+ * See <tt>statgrab(3)</tt> manpage.
+ */
 static VALUE
 statgrab_initialize(VALUE self, VALUE args)
 {
@@ -226,6 +233,10 @@ statgrab_initialize(VALUE self, VALUE args)
 	return self;
 }
 
+/*
+ * CPU usage as ticks spent in different states,
+ * see <tt>sg_get_cpu_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_cpu_stats(VALUE self)
 {
@@ -255,6 +266,10 @@ statgrab_cpu_stats(VALUE self)
 	return info;
 }
 
+/*
+ * CPU usage as ticks spent since last call,
+ * see <tt>sg_get_cpu_stats_diff(3)</tt> manpage.
+ */
 static VALUE
 statgrab_cpu_stats_diff(VALUE self)
 {
@@ -284,6 +299,10 @@ statgrab_cpu_stats_diff(VALUE self)
 	return info;
 }
 
+/*
+ * CPU usage as ticks difference in percents,
+ * see <tt>sg_get_cpu_percents(3)</tt> manpage.
+ */
 static VALUE
 statgrab_cpu_percents(VALUE self)
 {
@@ -318,6 +337,9 @@ statgrab_cpu_percents(VALUE self)
 	return info;
 }
 
+/*
+ * Disk I/O statistics, see <tt>sg_get_disk_io_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_disk_io_stats(VALUE self)
 {
@@ -351,6 +373,10 @@ statgrab_disk_io_stats(VALUE self)
 	return arr;
 }
 
+/*
+ * Disk I/O statistics difference since last call,
+ * see <tt>sg_get_disk_io_stats_diff(3)</tt> manpage.
+ */
 static VALUE
 statgrab_disk_io_stats_diff(VALUE self)
 {
@@ -385,6 +411,9 @@ statgrab_disk_io_stats_diff(VALUE self)
 	return arr;
 }
 
+/*
+ * Filesystem statistics, see <tt>sg_get_fs_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_fs_stats(VALUE self)
 {
@@ -438,6 +467,10 @@ statgrab_fs_stats(VALUE self)
 	return arr;
 }
 
+/*
+ * General operating system statistics,
+ * see <tt>sg_get_host_info(3)</tt> manpage.
+ */
 static VALUE
 statgrab_host_info(VALUE self)
 {
@@ -470,6 +503,9 @@ statgrab_host_info(VALUE self)
 	return info;
 }
 
+/*
+ * System load, see <tt>sg_get_load_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_load_stats(VALUE self)
 {
@@ -491,6 +527,9 @@ statgrab_load_stats(VALUE self)
 	return info;
 }
 
+/*
+ * Memory statistics, see <tt>sg_get_mem_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_mem_stats(VALUE self)
 {
@@ -514,6 +553,9 @@ statgrab_mem_stats(VALUE self)
 	return info;
 }
 
+/*
+ * Swap statistics, see <tt>sg_get_swap_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_swap_stats(VALUE self)
 {
@@ -535,6 +577,9 @@ statgrab_swap_stats(VALUE self)
 	return info;
 }
 
+/*
+ * Network statistics, see <tt>sg_get_network_io_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_network_io_stats(VALUE self)
 {
@@ -578,6 +623,10 @@ statgrab_network_io_stats(VALUE self)
 	return arr;
 }
 
+/*
+ * Network statistics difference since last call,
+ * see <tt>sg_get_network_io_stats_diff(3)</tt> manpage.
+ */
 static VALUE
 statgrab_network_io_stats_diff(VALUE self)
 {
@@ -622,6 +671,10 @@ statgrab_network_io_stats_diff(VALUE self)
 	return arr;
 }
 
+/*
+ * Network interface statistics,
+ * see <tt>sg_get_network_iface_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_network_iface_stats(VALUE self)
 {
@@ -667,6 +720,9 @@ statgrab_network_iface_stats(VALUE self)
 	return arr;
 }
 
+/*
+ * Paging statistics, see <tt>sg_get_page_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_page_stats(VALUE self)
 {
@@ -692,6 +748,10 @@ statgrab_page_stats(VALUE self)
 	return info;
 }
 
+/*
+ * Paging statistics difference since last call,
+ * see <tt>sg_get_page_stats(3)</tt> manpage.
+ */
 static VALUE
 statgrab_page_stats_diff(VALUE self)
 {
@@ -722,12 +782,34 @@ void
 Init_statgrab()
 {
 	/*
-	 * Main class
+	 * = Statgrab for Ruby
+	 *
+	 * Bindings to the libstatgrab portable system statistics library.
+	 *
+	 * == API
+	 *
+	 * All instance methods return symbol hashes or arrays of symbol
+	 * hashes, see libstatgrab manuals for reference. Also, +enum+
+	 * datatypes are represented as lowercased symbols with namespacing
+	 * cut off, e.g. +SG_IFACE_DUPLEX_FULL+ becomes <tt>:full</tt>.
+	 * Errors are handled and raises corresponding exceptions, all
+	 * inheriting from Statgrab::Exception. Byte values are represented
+	 * in kilobytes.
+	 *
+	 * == Sample program
+	 *
+	 *   require 'statgrab'
+	 *   begin
+	 *     sg = Statgrab.new
+	 *     puts "CPU Usage: %.1f%%" % sg.cpu_percents[:user]
+	 *   rescue Statgrab::Exception => e
+	 *     puts "Error! %s" % e.message
+	 *   end
 	 */
 	cStatgrab = rb_define_class("Statgrab", rb_cObject);
 
 	/*
-	 * Exceptions
+	 * Raised when a statgrab function failed and an error was set.
 	 */
 	eStatgrabException = rb_define_class_under(cStatgrab,
 			"Exception", rb_eException);
