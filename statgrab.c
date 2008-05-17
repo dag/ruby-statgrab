@@ -16,6 +16,7 @@
 
 #include <ruby.h>
 #include <statgrab.h>
+#include <string.h>
 
 VALUE cStatgrab;
 VALUE eStatgrabException;
@@ -897,6 +898,34 @@ statgrab_process_count(VALUE self)
 	return info;
 }
 
+/*
+ * The current logged in users,
+ * see <tt>sg_get_user_stats(3)</tt> manpage.
+ *
+ * Returns an array of login names.
+ */
+static VALUE
+statgrab_user_stats(VALUE self)
+{
+	int i;
+	char *names, *token, *saveptr;
+	sg_user_stats *stats;
+	VALUE arr;
+
+	stats = sg_get_user_stats();
+	if (stats == NULL)
+		statgrab_handle_error();
+
+	arr = rb_ary_new();
+	for (i = 0, names = stats->name_list; i < stats->num_entries;
+			i++, names = NULL) {
+		token = strtok_r(names, " ", &saveptr);
+		rb_ary_push(arr, rb_str_new2(token));
+	}
+
+	return arr;
+}
+
 void
 Init_statgrab()
 {
@@ -907,8 +936,9 @@ Init_statgrab()
 	 *
 	 * == API
 	 *
-	 * All instance methods return symbol hashes or arrays of symbol
-	 * hashes, see libstatgrab manuals for reference. Also, +enum+
+	 * All instance methods except user_stats return symbol hashes or
+	 * arrays of symbol hashes corresponding to their C struct
+	 * counterparts, see libstatgrab manuals for reference. Also, +enum+
 	 * datatypes are represented as lowercased symbols with namespacing
 	 * cut off, e.g. +SG_IFACE_DUPLEX_FULL+ becomes <tt>:full</tt>.
 	 * Errors are handled and raises corresponding exceptions, all
@@ -1095,6 +1125,10 @@ Init_statgrab()
 	rb_define_method(cStatgrab, "process_count",
 			statgrab_process_count, 0);
 	rb_define_alias(cStatgrab, "proc_count", "process_count");
+
+	rb_define_method(cStatgrab, "user_stats",
+			statgrab_user_stats, 0);
+	rb_define_alias(cStatgrab, "users", "user_stats");
 }
 
 /*
