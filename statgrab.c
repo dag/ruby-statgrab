@@ -896,66 +896,75 @@ Init_statgrab()
 	 * Methods
 	 */
 	rb_define_method(cStatgrab, "initialize", statgrab_initialize, -2);
+
 	rb_define_method(cStatgrab, "cpu_stats", statgrab_cpu_stats, 0);
-	rb_define_method(cStatgrab, "cpu", statgrab_cpu_stats, 0);
+	rb_define_alias(cStatgrab, "cpu", "cpu_stats");
+
 	rb_define_method(cStatgrab, "cpu_stats_diff",
 			statgrab_cpu_stats_diff, 0);
-	rb_define_method(cStatgrab, "cpu_difference",
-			statgrab_cpu_stats_diff, 0);
+	rb_define_alias(cStatgrab, "cpu_difference", "cpu_stats_diff");
+
 	rb_define_method(cStatgrab, "cpu_percents",
 			statgrab_cpu_percents, 0);
+
 	rb_define_method(cStatgrab, "disk_io_stats",
 			statgrab_disk_io_stats, 0);
-	rb_define_method(cStatgrab, "disk_io", statgrab_disk_io_stats, 0);
+	rb_define_alias(cStatgrab, "disk_io", "disk_io_stats");
+
 	rb_define_method(cStatgrab, "disk_io_stats_diff",
 			statgrab_disk_io_stats_diff, 0);
-	rb_define_method(cStatgrab, "disk_io_difference",
-			statgrab_disk_io_stats_diff, 0);
+	rb_define_alias(cStatgrab, "disk_io_difference",
+			"disk_io_stats_diff");
+
 	rb_define_method(cStatgrab, "fs_stats", statgrab_fs_stats, 0);
-	rb_define_method(cStatgrab, "fs", statgrab_fs_stats, 0);
-	rb_define_method(cStatgrab, "file_system", statgrab_fs_stats, 0);
+	rb_define_alias(cStatgrab, "fs", "fs_stats");
+	rb_define_alias(cStatgrab, "file_system", "fs_stats");
+
 	rb_define_method(cStatgrab, "host_info", statgrab_host_info, 0);
-	rb_define_method(cStatgrab, "host", statgrab_host_info, 0);
-	rb_define_method(cStatgrab, "system", statgrab_host_info, 0);
+	rb_define_alias(cStatgrab, "host", "host_info");
+	rb_define_alias(cStatgrab, "system", "host_info");
+
 	rb_define_method(cStatgrab, "load_stats", statgrab_load_stats, 0);
-	rb_define_method(cStatgrab, "load", statgrab_load_stats, 0);
-	rb_define_method(cStatgrab, "loadavg", statgrab_load_stats, 0);
-	rb_define_method(cStatgrab, "load_average", statgrab_load_stats, 0);
-	rb_define_method(cStatgrab, "system_load", statgrab_load_stats, 0);
+	rb_define_alias(cStatgrab, "load", "load_stats");
+	rb_define_alias(cStatgrab, "loadavg", "load_stats");
+	rb_define_alias(cStatgrab, "load_average", "load_stats");
+	rb_define_alias(cStatgrab, "system_load", "load_stats");
+
 	rb_define_method(cStatgrab, "mem_stats", statgrab_mem_stats, 0);
-	rb_define_method(cStatgrab, "memory", statgrab_mem_stats, 0);
+	rb_define_alias(cStatgrab, "memory", "mem_stats");
+
 	rb_define_method(cStatgrab, "swap_stats", statgrab_swap_stats, 0);
-	rb_define_method(cStatgrab, "swap", statgrab_swap_stats, 0);
+	rb_define_alias(cStatgrab, "swap", "swap_stats");
+
 	rb_define_method(cStatgrab, "network_io_stats",
 			statgrab_network_io_stats, 0);
-	rb_define_method(cStatgrab, "network_io",
-			statgrab_network_io_stats, 0);
-	rb_define_method(cStatgrab, "net_io", statgrab_network_io_stats, 0);
-	rb_define_method(cStatgrab, "network", statgrab_network_io_stats, 0);
-	rb_define_method(cStatgrab, "net", statgrab_network_io_stats, 0);
+	rb_define_alias(cStatgrab, "network_io", "network_io_stats");
+	rb_define_alias(cStatgrab, "net_io", "network_io_stats");
+	rb_define_alias(cStatgrab, "network", "network_io_stats");
+	rb_define_alias(cStatgrab, "net", "network_io_stats");
+
 	rb_define_method(cStatgrab, "network_io_stats_diff",
 			statgrab_network_io_stats_diff, 0);
-	rb_define_method(cStatgrab, "network_io_difference",
-			statgrab_network_io_stats_diff, 0);
-	rb_define_method(cStatgrab, "network_difference",
-			statgrab_network_io_stats_diff, 0);
-	rb_define_method(cStatgrab, "net_difference",
-			statgrab_network_io_stats_diff, 0);
+	rb_define_alias(cStatgrab, "network_io_difference",
+			"network_io_stats_diff");
+	rb_define_alias(cStatgrab, "network_difference",
+			"network_io_stats_diff");
+	rb_define_alias(cStatgrab, "net_difference",
+			"network_io_stats_diff");
+
 	rb_define_method(cStatgrab, "network_iface_stats",
 			statgrab_network_iface_stats, 0);
-	rb_define_method(cStatgrab, "network_iface",
-			statgrab_network_iface_stats, 0);
-	rb_define_method(cStatgrab, "net_iface",
-			statgrab_network_iface_stats, 0);
-	rb_define_method(cStatgrab, "iface",
-			statgrab_network_iface_stats, 0);
+	rb_define_alias(cStatgrab, "network_iface", "network_iface_stats");
+	rb_define_alias(cStatgrab, "net_iface", "network_iface_stats");
+	rb_define_alias(cStatgrab, "iface", "network_iface_stats");
+
 	rb_define_method(cStatgrab, "page_stats", statgrab_page_stats, 0);
-	rb_define_method(cStatgrab, "page", statgrab_page_stats, 0);
-	rb_define_method(cStatgrab, "pages", statgrab_page_stats, 0);
+	rb_define_alias(cStatgrab, "page", "page_stats");
+	rb_define_alias(cStatgrab, "pages", "page_stats");
+
 	rb_define_method(cStatgrab, "page_stats_diff",
 			statgrab_page_stats_diff, 0);
-	rb_define_method(cStatgrab, "page_difference",
-			statgrab_page_stats_diff, 0);
+	rb_define_alias(cStatgrab, "page_difference", "page_stats_diff");
 }
 
 /*
