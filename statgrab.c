@@ -868,6 +868,35 @@ statgrab_process_stats(VALUE self)
 	return arr;
 }
 
+/*
+ * Brief process count for different states,
+ * see <tt>sg_get_process_count(3)</tt> manpage.
+ */
+static VALUE
+statgrab_process_count(VALUE self)
+{
+	sg_process_count *count;
+	VALUE info;
+
+	count = sg_get_process_count();
+	if (count == NULL)
+		statgrab_handle_error();
+
+	info = rb_hash_new();
+	rb_hash_aset(info, ID2SYM(rb_intern("total")),
+			INT2FIX(count->total));
+	rb_hash_aset(info, ID2SYM(rb_intern("running")),
+			INT2FIX(count->running));
+	rb_hash_aset(info, ID2SYM(rb_intern("sleeping")),
+			INT2FIX(count->sleeping));
+	rb_hash_aset(info, ID2SYM(rb_intern("stopped")),
+			INT2FIX(count->stopped));
+	rb_hash_aset(info, ID2SYM(rb_intern("zombie")),
+			INT2FIX(count->zombie));
+
+	return info;
+}
+
 void
 Init_statgrab()
 {
@@ -1062,6 +1091,10 @@ Init_statgrab()
 	rb_define_alias(cStatgrab, "processes", "process_stats");
 	rb_define_alias(cStatgrab, "proc", "process_stats");
 	rb_define_alias(cStatgrab, "ps", "process_stats");
+
+	rb_define_method(cStatgrab, "process_count",
+			statgrab_process_count, 0);
+	rb_define_alias(cStatgrab, "proc_count", "process_count");
 }
 
 /*
