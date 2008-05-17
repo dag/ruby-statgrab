@@ -21,6 +21,11 @@ Optionally, you may build a Rubygem:
     su
     gem install statgrab-0.1.gem
 
+API Documentation
+-----------------
+
+See <http://statgrab.rubyforge.org/doc/>.
+
 Sample program
 --------------
 
