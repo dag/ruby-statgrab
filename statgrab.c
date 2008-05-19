@@ -957,6 +957,8 @@ Init_statgrab()
 	 */
 	cStatgrab = rb_define_class("Statgrab", rb_cObject);
 
+	rb_define_const(cStatgrab, "VERSION", rb_str_new2("0.1"));
+
 	/*
 	 * Raised when a statgrab function failed and an error was set.
 	 */
