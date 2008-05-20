@@ -66,7 +66,7 @@ VALUE eStatgrabXswVerMismatchError;
  * Only used internally.
  */
 static void
-statgrab_handle_error()
+statgrab_handle_error(void)
 {
 	sg_error err_num;
 	err_num = sg_get_error();
@@ -927,7 +927,7 @@ statgrab_user_stats(VALUE self)
 }
 
 void
-Init_statgrab()
+Init_statgrab(void)
 {
 	/*
 	 * = Statgrab for Ruby
