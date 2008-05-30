@@ -244,8 +244,7 @@ statgrab_cpu_stats(VALUE self)
 	sg_cpu_stats *stats;
 	VALUE info, time_at;
 
-	stats = sg_get_cpu_stats();
-	if (stats == NULL)
+	if ((stats = sg_get_cpu_stats()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -277,8 +276,7 @@ statgrab_cpu_stats_diff(VALUE self)
 	sg_cpu_stats *stats;
 	VALUE info, time_at;
 
-	stats = sg_get_cpu_stats_diff();
-	if (stats == NULL)
+	if ((stats = sg_get_cpu_stats_diff()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -310,8 +308,7 @@ statgrab_cpu_percents(VALUE self)
 	sg_cpu_percents *percents;
 	VALUE info, time_now;
 
-	percents = sg_get_cpu_percents();
-	if (percents == NULL)
+	if ((percents = sg_get_cpu_percents()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -348,8 +345,7 @@ statgrab_disk_io_stats(VALUE self)
 	sg_disk_io_stats *stats;
 	VALUE arr, info, time_at;
 
-	stats = sg_get_disk_io_stats(&entries);
-	if (stats == NULL)
+	if ((stats = sg_get_disk_io_stats(&entries)) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
@@ -385,8 +381,7 @@ statgrab_disk_io_stats_diff(VALUE self)
 	sg_disk_io_stats *stats;
 	VALUE arr, info, time_now;
 
-	stats = sg_get_disk_io_stats_diff(&entries);
-	if (stats == NULL)
+	if ((stats = sg_get_disk_io_stats_diff(&entries)) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
@@ -422,8 +417,7 @@ statgrab_fs_stats(VALUE self)
 	sg_fs_stats *stats;
 	VALUE arr, info;
 
-	stats = sg_get_fs_stats(&entries);
-	if (stats == NULL)
+	if ((stats = sg_get_fs_stats(&entries)) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
@@ -478,8 +472,7 @@ statgrab_host_info(VALUE self)
 	sg_host_info *host;
 	VALUE info, time_now;
 
-	host = sg_get_host_info();
-	if (host == NULL)
+	if ((host = sg_get_host_info()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -513,8 +506,7 @@ statgrab_load_stats(VALUE self)
 	sg_load_stats *load;
 	VALUE info;
 
-	load = sg_get_load_stats();
-	if (load == NULL)
+	if ((load = sg_get_load_stats()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -537,8 +529,7 @@ statgrab_mem_stats(VALUE self)
 	sg_mem_stats *stats;
 	VALUE info;
 
-	stats = sg_get_mem_stats();
-	if (stats == NULL)
+	if ((stats = sg_get_mem_stats()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -563,8 +554,7 @@ statgrab_swap_stats(VALUE self)
 	sg_swap_stats *stats;
 	VALUE info;
 
-	stats = sg_get_swap_stats();
-	if (stats == NULL)
+	if ((stats = sg_get_swap_stats()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -588,8 +578,7 @@ statgrab_network_io_stats(VALUE self)
 	sg_network_io_stats *stats;
 	VALUE arr, info, time_at;
 
-	stats = sg_get_network_io_stats(&entries);
-	if (stats == NULL)
+	if ((stats = sg_get_network_io_stats(&entries)) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
@@ -635,8 +624,7 @@ statgrab_network_io_stats_diff(VALUE self)
 	sg_network_io_stats *stats;
 	VALUE arr, info, time_now;
 
-	stats = sg_get_network_io_stats_diff(&entries);
-	if (stats == NULL)
+	if ((stats = sg_get_network_io_stats_diff(&entries)) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
@@ -683,8 +671,7 @@ statgrab_network_iface_stats(VALUE self)
 	sg_network_iface_stats *stats;
 	VALUE arr, info;
 
-	stats = sg_get_network_iface_stats(&entries);
-	if (stats == NULL)
+	if ((stats = sg_get_network_iface_stats(&entries)) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
@@ -730,8 +717,7 @@ statgrab_page_stats(VALUE self)
 	sg_page_stats *stats;
 	VALUE info, time_at;
 
-	stats = sg_get_page_stats();
-	if (stats == NULL)
+	if ((stats = sg_get_page_stats()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -759,8 +745,7 @@ statgrab_page_stats_diff(VALUE self)
 	sg_page_stats *stats;
 	VALUE info, time_now;
 
-	stats = sg_get_page_stats_diff();
-	if (stats == NULL)
+	if ((stats = sg_get_page_stats_diff()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -796,8 +781,7 @@ statgrab_process_stats(VALUE self)
 	sg_process_stats *stats;
 	VALUE arr, info, time_now;
 
-	stats = sg_get_process_stats(&entries);
-	if (stats == NULL)
+	if ((stats = sg_get_process_stats(&entries)) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
@@ -879,8 +863,7 @@ statgrab_process_count(VALUE self)
 	sg_process_count *count;
 	VALUE info;
 
-	count = sg_get_process_count();
-	if (count == NULL)
+	if ((count = sg_get_process_count()) == NULL)
 		statgrab_handle_error();
 
 	info = rb_hash_new();
@@ -912,8 +895,7 @@ statgrab_user_stats(VALUE self)
 	sg_user_stats *stats;
 	VALUE arr;
 
-	stats = sg_get_user_stats();
-	if (stats == NULL)
+	if ((stats = sg_get_user_stats()) == NULL)
 		statgrab_handle_error();
 
 	arr = rb_ary_new();
