@@ -3,6 +3,24 @@ Statgrab for Ruby
 
 Ruby bindings to the libstatgrab portable system statistics library.
 
+- [Releases on Rubyforge][1]
+- [Ticket tracking on Lighthouse][2]
+- [API documentation][3]
+
+Git repositories:
+
+- [Github][4]
+- [Gitorious][5]
+- [Rubyforge][6]
+
+[1]: http://rubyforge.org/projects/statgrab/
+[2]: http://amazing.lighthouseapp.com/projects/11473-statgrab-for-ruby/
+[3]: http://statgrab.rubyforge.org/doc/
+[4]: http://github.com/dag/ruby-statgrab/tree/master
+[5]: http://gitorious.org/projects/ruby-statgrab
+[6]: http://rubyforge.org/scm/?group_id=6160
+
+
 Building and installing
 -----------------------
 
@@ -15,16 +33,11 @@ Follow these procedures to build and install manually:
     su
     make install
 
-Optionally, you may build a Rubygem:
+Or if you prefer, install remotely from Rubyforge via Rubygems:
 
-    gem build statgrab.gemspec
     su
-    gem install statgrab-0.1.gem
+    gem install statgrab
 
-API Documentation
------------------
-
-See <http://statgrab.rubyforge.org/doc/>.
 
 Sample program
 --------------
@@ -36,6 +49,7 @@ Sample program
     rescue Statgrab::Exception => e
       puts "Error! %s" % e.message
     end
+
 
 Licensing
 ---------
